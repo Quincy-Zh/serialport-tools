@@ -2,3 +2,8 @@
 
 language: cpp
 os: windows
+
+script:
+  - qmake serialport.pro
+  - make
+  
