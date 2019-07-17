@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/www.easyicon.net/network_port_32px_1083441_easyicon.net.png</file>
+        <file>icons/www.easyicon.net/network_port_disconnect_32px_1083440_easyicon.net.png</file>
+        <file>icons/www.easyicon.net/Port_32px_530255_easyicon.net.png</file>
+    </qresource>
+</RCC>
