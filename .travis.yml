@@ -3,6 +3,9 @@
 language: cpp
 os: windows
 
+before_install:
+  - choco.exe -y -f qt-sdk-windows-x86-mingw_opengl
+  
 script:
   - qmake serialport.pro
   - make
