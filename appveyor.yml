@@ -18,6 +18,7 @@ after_build:
   - cmd: windeployqt serialport-tools.exe
   - cmd: set buildname=build%APPVEYOR_BUILD_NUMBER%_%APPVEYOR_REPO_COMMIT:~0,7%
   - cmd: 7z a ..\\Serialport-tools_%buildname%.7z *
+  - cmd: cd ..
   
 deploy:
   - provider: GitHub
