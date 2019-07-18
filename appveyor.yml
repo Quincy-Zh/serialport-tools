@@ -21,6 +21,10 @@ after_build:
   - cmd: cd ..
   - cmd: dir
 
+artifacts:
+  - path: '*.7z'
+    name: myartifact
+  
 deploy:
   - provider: GitHub
     tag: appveyor-v%appveyor_build_version%
@@ -28,5 +32,5 @@ deploy:
     description: Automated builds (Appveyor)
     auth_token:
       secure: 9SkJXg6/lG0/C2Xu4EPB8EfEn2vkf6Y1dWfa70t7eTyQ7lDRZB0DlXsIMRvztnfk
-    artifact: Serialport-tools_%buildname%.7z
+    artifact: myartifact
     draft: true
