@@ -4,8 +4,8 @@ image:
 
 init:
   - cmd: set QT_DIR=C:\Qt\5.12.2\mingw73_32
-  - cmd: dir C:\MinGW\bin
-  - cmd: set PATH=%QT_DIR%\bin;C:\MinGW\bin;%PATH%
+  - cmd: dir C:\mingw-w64\x86_64-7.2.0-posix-seh-rt_v5-rev1
+  - cmd: set PATH=%QT_DIR%\bin;C:\mingw-w64\x86_64-7.2.0-posix-seh-rt_v5-rev1\bin;%PATH%
   - cmd: qmake --version
   
 build_script:
