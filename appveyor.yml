@@ -4,11 +4,12 @@ image:
 
 init:
   - cmd: set QT_DIR=C:\Qt\5.12.2\mingw73_32
-  - cmd: dir %QT_DIR%
-  - cmd: set Path=%QT_DIR%\bin;C:\MinGW\bin;%Path%
+  - cmd: dir C:\MinGW\bin
+  - cmd: set PATH=%QT_DIR%\bin;C:\MinGW\bin;%PATH%
   - cmd: qmake --version
   
 build_script:
+  - cmd: echo %PATH%
   - cmd: qmake
   - cmd: cd output
   - cmd: windeployqt serialport-tools.exe
