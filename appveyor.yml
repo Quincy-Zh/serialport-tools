@@ -28,5 +28,5 @@ deploy:
     description: Automated builds (Appveyor)
     auth_token:
       secure: 9SkJXg6/lG0/C2Xu4EPB8EfEn2vkf6Y1dWfa70t7eTyQ7lDRZB0DlXsIMRvztnfk
-    artifact: '*.7z'
+    artifact: Serialport-tools_%buildname%.7z
     draft: true
