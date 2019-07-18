@@ -21,17 +21,11 @@ after_build:
   
 deploy:
   - provider: GitHub
-    description: Automated builds (Appveyor)
-    release: $(appveyor_repo_tag_name)
-    auth_token:
-      secure: a8e67928605c09e838151e03a2b565b0760f344d
-    artifact: Serialport-tools_%buildname%.7z
-    prerelease: false
-    tag: Serialport-tools-v%appveyor_build_version%
-    on:
-      #appveyor_repo_tag: true
-      #configuration: RelWithDebInfo
-      #release_artifact: true
-      branch: master
+  tag: appveyor-v%appveyor_build_version%
+  release: Serialport-tools-v%appveyor_build_version%
+  description: Automated builds (Appveyor)
+  auth_token:
+    secure: 9SkJXg6/lG0/C2Xu4EPB8EfEn2vkf6Y1dWfa70t7eTyQ7lDRZB0DlXsIMRvztnfk
+  artifact: '*.7z'
   
   
