@@ -3,15 +3,14 @@ image:
   - Visual Studio 2017
 
 init:
-  - cmd: set QT_DIR=C:\Qt\5.12.2\mingw73_32\
-  - cmd: dir C:\mingw-w64\x86_64-7.2.0-posix-seh-rt_v5-rev1\mingw64
-  - cmd: set PATH=%QT_DIR%\bin;C:\mingw-w64\x86_64-7.2.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+  - cmd: set QT_DIR=C:\Qt\5.12.2\msvc2017
+  - cmd: set PATH=%QT_DIR%\bin;%PATH%
   - cmd: qmake --version
   
 build_script:
   - cmd: echo %PATH%
   - cmd: qmake
-  - cmd: mingw32-make
+  - cmd: nmake
   - cmd: cd output
   - cmd: windeployqt serialport-tools.exe
   - cmd: dir
