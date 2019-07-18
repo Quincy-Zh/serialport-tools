@@ -1,0 +1,14 @@
+# appveyor.yml
+image:
+  - Visual Studio 2017
+
+init:
+  - qmake --version
+  
+build_script:
+  - dir
+  - qmake
+  - cd output
+  - windeployqt serialport-tools.exe
+  
+  
