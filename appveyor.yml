@@ -12,8 +12,24 @@ build_script:
   - cmd: echo %PATH%
   - cmd: qmake
   - cmd: nmake
+  
+after_build:
   - cmd: cd output
   - cmd: windeployqt serialport-tools.exe
-  - cmd: dir
+  - cmd: set buildname=build%APPVEYOR_BUILD_NUMBER%_%APPVEYOR_REPO_COMMIT:~0,7%
+  - cmd: 7z a ..\\Serialport-tools_%buildname%.7z *
+  
+deploy:
+  - provider: GitHub
+    description: Automated builds (Appveyor)
+    release: $(appveyor_repo_tag_name)
+    auth_token:
+      secure: ca88f0867a7f6d84b436acb8045aeaae943d23dc
+    artifact: Serialport-tools_%buildname%.7z
+    prerelease: false
+    on:
+      appveyor_repo_tag: true
+      configuration: RelWithDebInfo
+      release_artifact: true
   
   
