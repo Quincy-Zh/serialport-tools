@@ -27,9 +27,11 @@ deploy:
       secure: ca88f0867a7f6d84b436acb8045aeaae943d23dc
     artifact: Serialport-tools_%buildname%.7z
     prerelease: false
+    tag: Serialport-tools-v%appveyor_build_version%
     on:
-      appveyor_repo_tag: true
-      configuration: RelWithDebInfo
-      release_artifact: true
+      #appveyor_repo_tag: true
+      #configuration: RelWithDebInfo
+      #release_artifact: true
+      branch: master
   
   
