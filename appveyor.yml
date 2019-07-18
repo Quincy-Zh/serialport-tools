@@ -19,6 +19,7 @@ after_build:
   - cmd: set buildname=build%APPVEYOR_BUILD_NUMBER%_%APPVEYOR_REPO_COMMIT:~0,7%
   - cmd: 7z a ..\\Serialport-tools_%buildname%.7z *
   - cmd: cd ..
+  - cmd: dir
   
 deploy:
   - provider: GitHub
@@ -28,3 +29,4 @@ deploy:
     auth_token:
       secure: 9SkJXg6/lG0/C2Xu4EPB8EfEn2vkf6Y1dWfa70t7eTyQ7lDRZB0DlXsIMRvztnfk
     artifact: '*.7z'
+    draft: true
