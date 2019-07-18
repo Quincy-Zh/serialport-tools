@@ -5,6 +5,7 @@ image:
 init:
   - cmd: set QT_DIR=C:\Qt\5.12.2\msvc2017
   - cmd: set PATH=%QT_DIR%\bin;%PATH%
+  - cmd: call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
   - cmd: qmake --version
   
 build_script:
