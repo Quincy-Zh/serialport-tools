@@ -11,6 +11,7 @@ init:
 build_script:
   - cmd: echo %PATH%
   - cmd: qmake
+  - cmd: mingw32-make
   - cmd: cd output
   - cmd: windeployqt serialport-tools.exe
   - cmd: dir
