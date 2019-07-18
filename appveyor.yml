@@ -24,7 +24,7 @@ deploy:
     description: Automated builds (Appveyor)
     release: $(appveyor_repo_tag_name)
     auth_token:
-      secure: ca88f0867a7f6d84b436acb8045aeaae943d23dc
+      secure: a8e67928605c09e838151e03a2b565b0760f344d
     artifact: Serialport-tools_%buildname%.7z
     prerelease: false
     tag: Serialport-tools-v%appveyor_build_version%
