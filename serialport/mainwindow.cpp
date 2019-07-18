@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 
 #include "dialogparams.h"
+#include "dialogactivateplugin.h"
+#include "serialport_plugins.h"
 
 #include <QDebug>
 #include <QPushButton>
@@ -13,6 +15,10 @@
 #include <QScrollBar>
 #include <QTextCursor>
 #include <QTextCodec>
+
+#include <QLibrary>
+
+const QString MainWindow::pluginsPath("./plugins");
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -29,7 +35,9 @@ MainWindow::MainWindow(QWidget *parent) :
     bytesRecv(0),
     bytesSend(0),
     timerId(0),
-    rexHexCharts("[^0-9A-Fa-f ]")
+    rexHexCharts("[^0-9A-Fa-f ]"),
+    plugin(nullptr),
+    pluginTabPageIndex(-1)
 {
     ui->setupUi(this);
     modUI();
@@ -191,6 +199,7 @@ void MainWindow::closePort()
 void MainWindow::serialportReadyRead()
 {
     QByteArray r = serialport->readAll();
+
     newDataArrived(r);
 }
 
@@ -278,6 +287,8 @@ void MainWindow::newDataArrived(const QByteArray &dat)
     bytesRecv += quint64(dat.size());
 
     updateTrafficInfo();
+
+    emit serialportHasNewData(dat);
 }
 
 QByteArray MainWindow::prepeData(const QString &text)
@@ -408,7 +419,7 @@ void MainWindow::on_pushButtonSend_clicked()
         return;
     }
 
-    QString text = ui->lineEdit_2->text();
+    QString text = ui->plainTextEditSend->toPlainText();
 
     if(text.isEmpty())
     {
@@ -461,7 +472,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
 {
     if(event->timerId() == timerId)
     {
-        QString text = ui->lineEdit_2->text();
+        QString text = ui->plainTextEditSend->toPlainText();
         if(text.isEmpty())
         {
             ui->checkBoxTimer->click();
@@ -475,5 +486,97 @@ void MainWindow::timerEvent(QTimerEvent *event)
             ui->checkBoxTimer->click();
             statusBar()->showMessage(tr("发送失败，定时发送已经取消"), 5000);
         }
+    }
+}
+
+void MainWindow::pluginRequest(const QByteArray &dat)
+{
+    if(!isPortOpen)
+    {
+        return;
+    }
+
+    send(dat);
+}
+
+void MainWindow::on_actionActivatePlugin_triggered()
+{
+    if(plugin != nullptr)
+    {
+        int ans = QMessageBox::question(this,
+                              tr("提示"),
+                              tr("已经有插件激活，激活新的插件会卸载当前插件\n 是否继续？"),
+                              QMessageBox::Yes|QMessageBox::No,
+                              QMessageBox::Yes);
+
+        if(ans != QMessageBox::Yes)
+        {
+            return;
+        }
+
+        if(pluginTabPageIndex > 0)
+        {
+            ui->tabWidget->removeTab(pluginTabPageIndex);
+
+            pluginTabPageIndex = -1;
+        }
+
+        //
+        disconnect(plugin, &SerialportPlugin::requestSend,
+                this, &MainWindow::pluginRequest);
+        disconnect(this, &MainWindow::serialportHasNewData,
+                plugin, &SerialportPlugin::newDataArrived);
+
+        delete  plugin;
+        plugin = nullptr;
+    }
+
+    DialogActivatePlugin dlg(pluginsPath);
+
+    if(dlg.exec() != QDialog::Accepted)
+    {
+        return;
+    }
+
+    loadPlugin(dlg.getPluginPath());
+}
+
+void MainWindow::loadPlugin(const QString &path)
+{
+    QLibrary lib(path);
+
+    if(!lib.load())
+    {
+        qDebug() << lib.errorString();
+
+        return;
+    }
+
+    getPluginInstance instance =
+            getPluginInstance(lib.resolve("getInstance"));
+
+    if(!instance)
+    {
+        qDebug() << "Cannot resolve \"getInstance\".";
+
+        return;
+    }
+
+    plugin = instance();
+    if(plugin)
+    {
+        QWidget *w = plugin->widget();
+
+        if(w)
+        {
+            pluginTabPageIndex = ui->tabWidget->addTab(w, plugin->name());
+        }
+
+        connect(plugin, &SerialportPlugin::requestSend,
+                this, &MainWindow::pluginRequest);
+        connect(this, &MainWindow::serialportHasNewData,
+                plugin, &SerialportPlugin::newDataArrived);
+
+        qDebug() << plugin->name() << "loaded.";
     }
 }

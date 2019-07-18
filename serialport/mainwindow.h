@@ -12,6 +12,8 @@ class QLabel;
 class QSerialPort;
 class QTextCodec;
 
+class SerialportPlugin;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -28,6 +30,7 @@ private slots:
     void serialportReadyRead();
     void clean();
     qint64 doSend(const QString &text);
+    void pluginRequest(const QByteArray &dat);
 
     void on_actionAboutQt_triggered();
 
@@ -42,6 +45,8 @@ private slots:
     void on_pushButtonSend_clicked();
 
     void on_checkBoxTimer_released();
+
+    void on_actionActivatePlugin_triggered();
 
 private:
     void modUI();
@@ -59,6 +64,11 @@ private:
     void newDataArrived(const QByteArray &dat);
 
     void updateTrafficInfo();
+
+    void loadPlugin(const QString &path);
+
+signals:
+    void serialportHasNewData(const QByteArray &);
 
 private:
     Ui::MainWindow *ui;
@@ -87,6 +97,11 @@ private:
     int timerId;
 
     QRegExp rexHexCharts;
+
+    SerialportPlugin *plugin;
+    int pluginTabPageIndex;
+
+    static const QString pluginsPath;
 };
 
 #endif // MAINWINDOW_H
