@@ -1,4 +1,4 @@
-#include "plugin_modbus_master.h"
+﻿#include "plugin_modbus_master.h"
 #include "ui_form.h"
 
 const QString ModbusMaster::_name("Modbus Master");
@@ -40,3 +40,4 @@ extern "C" SERIALPORT_PLUGIN_EXPORT SerialportPlugin * getInstance()
 {
     return new ModbusMaster();
 }
+
