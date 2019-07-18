@@ -20,7 +20,7 @@ after_build:
   - cmd: 7z a ..\\Serialport-tools_%buildname%.7z *
   - cmd: cd ..
   - cmd: dir
-  
+
 deploy:
   - provider: GitHub
     tag: appveyor-v%appveyor_build_version%
