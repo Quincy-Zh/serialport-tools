@@ -3,18 +3,16 @@ image:
   - Visual Studio 2017
 
 init:
-  - cmd: set QT_DIR=C:\Qt\5.12.2\msvc2017
-  - cmd: set PATH=%QT_DIR%\bin;%PATH%
-  - cmd: call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
-  - cmd: qmake --version
+  - cmd: set QT_DIR=C:\Qt\5.12.2\mingw73_32
+  - cmd: set PATH=%QT_DIR%\bin;C:\Qt\Tools\mingw730_32\bin;%PATH%
   
 build_script:
-  - cmd: echo %PATH%
   - cmd: qmake
-  - cmd: nmake
+  - cmd: mingw32-make
   
 after_build:
   - cmd: cd output
+  - cmd: del /Q plugins\*.a
   - cmd: windeployqt serialport-tools.exe
   - cmd: set buildname=build%APPVEYOR_BUILD_NUMBER%_%APPVEYOR_REPO_COMMIT:~0,7%
   - cmd: 7z a ..\\Serialport-tools_%buildname%.7z *
